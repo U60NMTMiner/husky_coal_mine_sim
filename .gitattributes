@@ -1,0 +1,2 @@
+coalmine.dae filter=lfs diff=lfs merge=lfs -text
+husky_coal_sim/husky_coal_gazebo/worlds/include/coalmine.dae filter=lfs diff=lfs merge=lfs -text
