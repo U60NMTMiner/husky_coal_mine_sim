@@ -17,8 +17,10 @@ static:
     subscribe_to_updates: true
 
 obstacles_laser:
+    #observation_sources: laser
+    #laser: {sensor_frame: ouster_link, data_type: PointCloud2, topic: ouster_cloud, marking: true, clearing: true, inf_is_valid: true}    
     observation_sources: laser
-    laser: {data_type: LaserScan, clearing: true, marking: true, topic: scan_multi, inf_is_valid: true}
+    laser: {sensor_frame: ouster_link, data_type: LaserScan, clearing: true, marking: true, topic: ouster_scan, inf_is_valid: true}
 
 inflation:
     inflation_radius: 1.0

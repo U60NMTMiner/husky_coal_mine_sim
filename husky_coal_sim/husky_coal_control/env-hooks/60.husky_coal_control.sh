@@ -1,2 +1,2 @@
-expose HUSKY_KEYB=0
-expose HUSKY_JOY=0
+export HUSKY_KEYB=0
+export HUSKY_JOY=0
