@@ -39,7 +39,7 @@ export ROS_DISTRO=noetic #if ros already installed, this should be set --> check
 
 A) ROS dependencies:
 ```
-sudo apt-get install -y ros-$ROS_DISTRO-gazebo
+sudo apt-get install -y ros-$ROS_DISTRO-gazebo-*
 sudo apt-get install -y ros-$ROS_DISTRO-navigation
 sudo apt-get install -y ros-$ROS_DISTRO-teleop-twist-keyboard
 sudo apt-get install -y ros-$ROS_DISTRO-robot-localization
