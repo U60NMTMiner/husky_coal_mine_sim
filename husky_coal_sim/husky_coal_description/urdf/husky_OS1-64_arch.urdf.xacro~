@@ -2,9 +2,9 @@
 <!--
 Software License Agreement (BSD)
 
-\file      husky_OS1-64_arch.urdf.xacro
-\authors   Vasilis Androulakis <vandroulakis100@gmail.com> 
-\based on  husky.urdf.xacro written by: Paul Bovbel <pbovbel@clearpathrobotics.com>, Devon Ash <dash@clearpathrobotics.com>
+\file      husky_playpen.launch
+\authors   Paul Bovbel <pbovbel@clearpathrobotics.com
+\copyright Copyright (c) 2015, Clearpath Robotics, Inc., All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that
 the following conditions are met:
@@ -371,7 +371,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
    <gazebo reference="box_link">
      <material>Gazebo/Red</material>
-     <transparency>0.9</transparency>
+     <transparency>0.6</transparency>
    </gazebo>
 
 
@@ -493,7 +493,8 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   <xacro:if value="$(arg laser_3d_enabled)">
     <!-- Add primary sensor arch/rail for OS1-64 LiDAR -->
     <xacro:sensor_arch prefix="OS1_" parent="base_link">
-      <origin xyz="0 0 0.25" rpy="$(arg laser_3d_rpy)"/>
+      <origin xyz="0.20 0 0.46" rpy="$(arg laser_3d_rpy)"/>
+<!--      <origin xyz="0 0 0.25" rpy="$(arg laser_3d_rpy)"/>  -->
     </xacro:sensor_arch>
   
     <!-- Ouster sensor links and fixed joints -->

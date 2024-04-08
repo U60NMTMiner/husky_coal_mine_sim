@@ -10,6 +10,19 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(gazebo REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 
+#Protobuf
+# Correctly set protobuf_DIR to the directory containing protobuf-config.cmake
+#set(protobuf_DIR "/usr/local/lib/cmake/protobuf") # protobuf 3.4.1
+#set(protobuf_DIR "/usr/local/include/google/protobuf") # protobuf 3.6.1
+#set(protobuf_DIR "/usr/local/lib/")
+
+
+# Find the protobuf package
+#find_package(Protobuf REQUIRED)
+#find_package(Protobuf 3.4.0 EXACT REQUIRED)
+#include_directories(${PROTOBUF_INCLUDE_DIRS})
+#include(FindProtobuf)
+
 catkin_package(
   INCLUDE_DIRS include ${GAZEBO_INCLUDE_DIRS}
   LIBRARIES gazebo_ros_ouster_laser gazebo_ros_ouster_gpu_laser
@@ -37,6 +50,7 @@ add_library(gazebo_ros_ouster_gpu_laser src/GazeboRosOusterLaser.cpp)
 target_link_libraries(gazebo_ros_ouster_gpu_laser
   ${catkin_LIBRARIES}
   ${GAZEBO_LIBRARIES}
+  ${PROTOBUF_LIBRARIES}
   GpuRayPlugin
 )
 target_compile_definitions(gazebo_ros_ouster_gpu_laser PRIVATE GAZEBO_GPU_RAY=1)

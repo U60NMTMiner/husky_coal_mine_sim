@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!--
+Software License Agreement (BSD)
+
+\file      husky_playpen.launch
+\authors   Paul Bovbel <pbovbel@clearpathrobotics.com
+\copyright Copyright (c) 2015, Clearpath Robotics, Inc., All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that
+the following conditions are met:
+ * Redistributions of source code must retain the above copyright notice, this list of conditions and the
+   following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+   following disclaimer in the documentation and/or other materials provided with the distribution.
+ * Neither the name of Clearpath Robotics nor the names of its contributors may be used to endorse or promote
+   products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WAR-
+RANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, IN-
+DIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<launch>
+    
+  <arg name="laser_3d_enabled" default="true"/>
+  <arg name="realsense_enabled" default="false"/>   
+  
+  <arg name="laser_3d_topic" default="$(optenv HUSKY_LASER_3D_TOPIC ouster_cloud)"/>
+  <arg name="laser_scan_topic" default="$(optenv HUSKY_LASER_SCAN_TOPIC ouster_scan)"/>
+  
+  <arg name="gmap" default="$(optenv HUSKY_GMAP false)"/> <!-- gmapping is hector slam-->
+  <arg name="amcl" default="$(optenv HUSKY_AMCL false)"/> <!-- amcl is localization only if the map is already known -->
+
+  <!-- Launch gmapping & move_base-->
+  <group if="$(arg gmap)">
+     <!-- Launch pointcloud_to_lasermap node for gmapping or amcl -->
+     <!-- !we need this bcs move_base node expects data_type:LaserScan-->
+     <!-- make sure that the gazebo_ros_laser_controller publiches into HUSKY_LASER_3D_TOPIC=ouster_cloud-->
+     <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="ouster_laserscan_node" output="screen" required="true"> 
+       <param name="~/target_frame"        value="ouster_link"/> <!--Leave disabled to output in pointcloud frame --> 
+       <param name="~/transform_tolerance" value="0.01"/>
+       <param name="~/min_height"          value="0.05"/>  <!-- change this to exclude floor bumps from costmap -->
+       <param name="~/max_height"          value="1.2"/>
+       <param name="~/angle_min"           value="-1.570796327"/> <!-- -pi/2 -->
+       <param name="~/angle_max"           value="1.570796327"/>  <!-- pi/2 -->
+       <param name="~/angle_increment"     value="0.0087"/>
+       <param name="~/scan_time"           value="0.3333"/> 
+       <param name="~/range_min"           value="0.45"/>
+       <param name="~/range_max"           value="50"/>       
+       <param name="~/concurrency_level"   value="0"/>
+       <param name="~/use_inf"             value="true"/>
+       
+       <remap from="/cloud_in" to="$(arg laser_3d_topic)"/>
+       <remap from="/scan" to="$(arg laser_scan_topic)"/>
+     </node>
+     
+     <!--- Run gmapping - Define the desired parameters in ...husky_coal_navigation/config/costmap_common.yaml --> 
+     <include file="$(find husky_coal_navigation)/launch/gmapping_slam/gmapping.launch">
+     <!--include file="$(find husky_navigation)/launch/gmapping.launch"-->
+       <arg name="scan_topic" value="$(arg laser_scan_topic)" />
+       <!-- config parameters changed are "update_frequency" "publish_frequency" "resolution" -->
+     </include>
+
+     <!--- Run Move Base -->
+     <include file="$(find husky_coal_navigation)/launch/move_base/move_base.launch">
+     <!--include file="$(find husky_navigation)/launch/move_base.launch"-->
+       <arg name="no_static_map" value="true"/>
+       <arg name="laser_scan_topic" value="$(arg laser_scan_topic)"/>
+     <!-- desired params are defined in the move_base.launch (so that default config files are preserved)-->
+     </include>
+     
+  </group>
+  
+   <!-- Launch amcl & move_base -->
+   <group if="$(arg amcl)">
+     <!-- Launch pointcloud_to_lasermap node for gmapping or amcl -->
+     <!-- !we need this bcs move_base node expects data_type:LaserScan-->
+     <!-- make sure that the gazebo_ros_laser_controller publiches into HUSKY_LASER_3D_TOPIC=ouster_cloud-->
+     <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan" required="true">
+       <remap from="/cloud_in" to="$(arg laser_3d_topic)"/>
+       <remap from="/scan" to="$(arg laser_scan_topic)"/>
+     </node>
+     
+     <!-- Run the map server -->
+     <arg name="map_file" default="$(find husky_coal_navigation)/maps/playpen_map.yaml"/>
+     <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+     <!--- Run AMCL -->
+     <include file="$(find husky_coal_navigation)/launch/amcl/amcl.launch" />
+
+     <!--- Run Move Base -->
+     <include file="$(find husky_coal_navigation)/launch/move_base/move_base.launch"/>
+  </group>
+   
+  <!-- TFs for static map and odom  -> check with '''rosrun rqt_tf_tree rqt_tf_tree''' -->
+  <!-- Note: Just for checks. Do not run with gamapping. These nodes publish repeated messages and cause the TF_REPEATED_DATA warnings -->
+  <!--node pkg="tf" type="static_transform_publisher" name="odom_broadcaster" args="1 0 0 0 0 0 1 map odom 600000" /-->
+  <!--node pkg="tf2_ros" type="static_transform_publisher" name="map2odom_tf_broadcaster" args="1 0 0 0 0 0 1 map odom" /-->
+  <!--node pkg="tf2_ros" type="static_transform_publisher" name="map2baselink_tf_broadcaster" args="1 0 0 0 0 0 1 map base_link" /-->
+  
+  <!-- Launch coal mine environment -->
+  <include file="$(find husky_coal_gazebo)/launch/coal_mine_playpen.launch"/>
+  
+  <!-- Launch robot -->
+  <include file="$(find husky_coal_gazebo)/launch/spawn_husky.launch">
+    <arg name="laser_3d_enabled" value="$(arg laser_3d_enabled)"/>
+    <arg name="realsense_enabled" value="$(arg realsense_enabled)"/>
+  </include>
+  
+  <!-- Launch teleop node for moving husky with keyboard -->
+  <arg name="teleop" default="$(optenv HUSKY_KEYB false)"/>
+    <node if="$(arg teleop)" name="teleop_kbrd" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" />
+  <!--node if="$(arg teleop)" name="teleop_keyboard" pkg="husky_coal_control" type="teleop_keyboard.py" output="screen" /-->
+       
+  <!-- RVIZ -->
+  <arg name="rviz" default="$(optenv HUSKY_RVIZ true)"/>
+  <arg name="rviz_conf" default="$(optenv HUSKY_RVIZ_CONF g_cart_n2.rviz)"/>
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz"
+       args="-d $(find husky_coal_viz)/rviz/$(arg rviz_conf)"/>
+    
+</launch>
