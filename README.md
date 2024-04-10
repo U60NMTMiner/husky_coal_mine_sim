@@ -108,7 +108,7 @@ roslaunch husky_coal_gazebo husky_empty_world.launch
 ```
 
 Note 4: The available robots in this package are stored in the /husky_coal_description/urdf directory and include:
-i)husky_OS1-64_arch.urdf.xacro -> Husky with box (drone house) and an Ouster OS1-64 LiDAR on a rail/arch - (mostly used and updated version)
+i)husky_OS1-64_arch.urdf.xacro -> Husky with box (drone house) and an Ouster OS1-64 LiDAR on a rail/arch - (mostly used and most updated version)
 ii)husky_1vel_arch.urdf.xacro -> Husky with box (drone house) and a Velodyne VLP-16 LiDAR on a rail/arch
 iii)husky_4vel.urdf.xacro -> Husky with box (drone house) and 4 Velodyne VLP-16 LiDAR
 iv)husky_4vel.urdf.xacro -> Husky with a Velodyne VLP-16 LiDAR
@@ -117,7 +117,7 @@ iv)husky_4vel.urdf.xacro -> Husky with a Velodyne VLP-16 LiDAR
 
 ### 1. (Optional) Various configurations through environment params
 
-A) You may set the proper environment parameters to turn on/off sensors, bumpers, etc. SEE instructions at (https://github.com/husky/husky/tree/noetic-devel/husky_description)
+A) You may set the proper environment parameters to turn on/off sensors, bumpers, etc. See instructions at (https://github.com/husky/husky/tree/noetic-devel/husky_description)
 ```
 export HUSKY_FRONT_BUMPER=1 #bumpers
 export HUSKY_REAR_BUMPER=1
@@ -134,20 +134,20 @@ export HUSKY_LASER_3D_RPY='0 0 0'
 ```
 
 B) Configure params for rviz visualization:
-Default behavior of this package is that if HUSKY_RVIZ is true rviz visualization is opened up alongside the gazebo simulation with the configuration specified with the HUSKY_RVIZ_CONF environment params. The second parameter is the name of the rviz file which must be located inside the /husky_coal_viz/rviz directory.
+Default behavior of this package is that if HUSKY_RVIZ is true, rviz visualization is opened up alongside the gazebo simulation with the configuration file specified in HUSKY_RVIZ_CONF environment params. The second parameter is the name of the rviz file which must be located inside the /husky_coal_viz/rviz directory.
 
 Default values are specified in /husky_coal_viz/env-hooks directory as 
 export HUSKY_RVIZ=1  &
 export HUSKY_RVIZ_CONF=husky_coal_robot_nav2.rviz. 
 
-If user wishes to change these values, then type in terminal:
+If users wish to change these values, they can do so in terminal:
 ```
-export HUSKY_RVIZ=1
-export HUSKY_RVIZ_CONF=husky_coal_robot_nav2.rviz
+export HUSKY_RVIZ=0
+export HUSKY_RVIZ_CONF=<rviz_config_filename.rviz>
 ```
 
 C) Define mapping and navigation packages:
-Default navigation of this package is to use the gmapping and move-base packages from ros-$ROS_DISTRO-navigation package (located at system's default ros installation directory). This is done only if the user sets the HUSKY_GMAP environment parameter to true:
+Default navigation of this package is to use the gmapping and move-base packages from ros-$ROS_DISTRO-navigation package (launch from the husky_coal_navigation directory). Bby default the environment parameter that trigger this is set as: HUSKY_GMAP=1:
 ```
 export HUSKY_GMAP=1
 ```
