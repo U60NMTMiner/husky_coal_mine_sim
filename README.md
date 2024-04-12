@@ -169,9 +169,9 @@ roslaunch husky_coal_gazebo husky_coalpen.launch
 ```
 
 ## Screenshots
-![Screenshot of gazebo coal mine simulated world - 04-05-2024](/../assets/screenshots/gazebo_screenshot_2024-04-05 11-52-15.png)
+![Screenshot of gazebo coal mine simulated world - 04-05-2024](/assets/screenshots/gazebo_screenshot_2024-04-05_11-52-15.png)
 
-![Screenshot of rviz costmap created while traversing around a pillar - 04-05-2024](/../assets/screenshots/rviz_screenshot_2024_04_05-11_50_53.png)
+![Screenshot of rviz costmap created while traversing around a pillar - 04-05-2024](/assets/screenshots/rviz_screenshot_2024_04_05-11_50_53.png)
 
-![Screenshot of occupancy grid map created with gmapping & move base while traversing around a pillar - 04-05-2024](/../assets/screenshots/occgrid_coalmine_2024-04-05 11-52-15.png)
+![Screenshot of occupancy grid map created with gmapping & move base while traversing around a pillar - 04-05-2024](/assets/screenshots/occgrid_coalmine_2024-04-05_11-52-15.png)
 
