@@ -3,7 +3,7 @@ A ROS package that implements a customized Husky UGV in a Gazebo simulation of a
 
 Disclaimer: The package is a combination of existing open-source github packages and has a BSD-3-Clause license.
 
-## The package contains
+## This package contains
 
 - [husky-coal-sim] Portable package for gazebo-rviz simulation of a Husky equipped with Ouster or VLP-16 LiDAR in a coal mine environment (this package can be installed and launched from catkin workspace).
 - [ouster-description] cloned from [OUSTER-DESCRIPTION](https://github.com/clearpathrobotics/ouster_description.git) 
@@ -167,4 +167,10 @@ printenv | grep -e GAZEBO_* -e HUSKY_*
 ```
 roslaunch husky_coal_gazebo husky_coalpen.launch
 ```
+=============================================================================================
+
+## Screenshots
+![Screenshot of gazebo coal mine simulated world - 04-05-2024](../assets/screenshots/gazebo_screenshot_2024-04-05 11-52-15.png)
+![Screenshot of rviz costmap created while traversing around a pillar - 04-05-2024](../assets/screenshots/rviz_screenshot_2024_04_05-11_50_53.png)
+![Screenshot of occupancy grid map created with gmapping & move base while traversing around a pillar - 04-05-2024](../assets/screenshots/occgrid_coalmine_2024-04-05 11-52-15.png)
 
