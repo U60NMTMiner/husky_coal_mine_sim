@@ -49,6 +49,7 @@ class MoveToPoints:
             yaw_rad = radians(yaw_deg)
 
             #Sets the goal to be relative to the initial position
+            #Change these lines to make it absolute position. 
             goalX = initial_x + x
             goalY = initial_y + y
 
