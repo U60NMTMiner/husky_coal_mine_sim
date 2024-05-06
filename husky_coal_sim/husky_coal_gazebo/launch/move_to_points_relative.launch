@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="gazebo_ros" type="move_to_points_relative.py" name="move_to_points_relative" output="screen">
+        <!-- Load Sequence of Points (Cartesian Coordinates wrt "map" RF, in meters) -->
+        <rosparam param="p_seq">[2,0,0, 2,0,0, -2,0,0, 1,2,60, 4,1,0]</rosparam>
+   
+    </node>
+</launch>
+
