@@ -1,0 +1,11 @@
+For the move_to_points_relative node: make sure that to run the following commands:
+. devel setup.bash
+roslaunch husky_coal_gazebo move_to_points_relative.launch (this will cause an error, but needs to be run for the python file to work).
+rosrun husky_coal_gazebo move_to_points_relative.py
+
+It will constantly throw warnings (similar to running the husky coalpen), but it does seem to work correctly. 
+ 
+ 
+For the topic_moniter, make sure to run it in the following format rosrun husky_coal_gazebo topic_moniter.py /topic_name
+
+It will print out the data every 1 second but that can be changed in the python file. It should correctly import any needed modules to read the messages but I have only tested it with a few of them. 
